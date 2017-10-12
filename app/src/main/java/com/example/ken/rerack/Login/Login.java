@@ -9,9 +9,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ken.rerack.ApiRequest;
 import com.example.ken.rerack.MainActivity;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,26 +71,44 @@ public class Login extends AppCompatActivity {
     public void login(View v)
     {
         getViewIds();
-        getInlogStrings();
+        getLoginStrings();
         if (!username.isEmpty() && !password.isEmpty()){
-            for (User u : users){
-                if(u.login(username,password)){
-                    Intent intent = new Intent(this, MainActivity.class);
-                    String textMessage = username;
+           // for (User u : users){
+            //    if(u.login(username,password)){
+                    ApiRequest api = new ApiRequest();
+                    api.username = this.username;
+                    api.password = this.password;
+                    api.login = this;
+                    api.execute();
+
+                 /*   Intent intent = new Intent(this, MainActivity.class);
+                    String textMessage = user.getUsername();
                     intent.putExtra(EXTRA_MESSAGE,textMessage);
                     isLoggedIn = true;
                     saveCredentials();
-                    startActivity(intent);
-                    break;
-                }
-            }
-            isLoggedIn();
+                    startActivity(intent);*/
+                  //  break;
+              //  }
+            //}
+        //    isLoggedIn();
         }
         else {
             Toast.makeText(Login.this,"Username or password is empty!", Toast.LENGTH_LONG).show();
         }
     }
+    public void loginSuccess(User user){
+        Intent intent = new Intent(this, MainActivity.class);
+        String textMessage = user.getUsername();
+        intent.putExtra(EXTRA_MESSAGE,textMessage);
+        isLoggedIn = true;
+        saveCredentials();
+        startActivity(intent);
 
+        isLoggedIn();
+    }
+    public void loginFailed(){
+        isLoggedIn();
+    }
     private void saveCredentials(){
         if (chkbox.isChecked()){
             editor.putString("Username",username);
@@ -105,7 +126,7 @@ public class Login extends AppCompatActivity {
         chkbox = (CheckBox)findViewById(R.id.chkCredent);
     }
 
-    private void getInlogStrings(){
+    private void getLoginStrings(){
         username = un.getText().toString();
         password = ps.getText().toString();
     }

@@ -5,33 +5,29 @@ package com.example.ken.rerack;
  */
 
 public class User {
-    private String username,password;
+    private String username;
     private int fitCoins;
 
     public String getUsername() {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public int getFitCoins() { return fitCoins; }
 
-    public User(String username, String password, int fitCoins) {
-
+    public User(String username,  int fitCoins) {
         this.username = username;
-        this.password = password;
         this.fitCoins = fitCoins;
     }
 
-    public boolean login (String username, String password){
-        if (this.username.equals(username) && this.password.equals(password))
-        {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+//    public boolean login (String username, String password){
+//        if (this.username.equals(username) && this.password.equals(password))
+//        {
+//            ApiRequest api = new ApiRequest();
+//            api.execute();
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+//    }
 }
