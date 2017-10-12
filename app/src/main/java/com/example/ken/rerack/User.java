@@ -6,6 +6,7 @@ package com.example.ken.rerack;
 
 public class User {
     private String username,password;
+    private int fitCoins;
 
     public String getUsername() {
         return username;
@@ -15,10 +16,13 @@ public class User {
         return password;
     }
 
-    public User(String username, String password) {
+    public int getFitCoins() { return fitCoins; }
+
+    public User(String username, String password, int fitCoins) {
 
         this.username = username;
         this.password = password;
+        this.fitCoins = fitCoins;
     }
 
     public boolean login (String username, String password){
