@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         checkNFCStatus();
-
-
     }
 
     public void checkNFCStatus(){
