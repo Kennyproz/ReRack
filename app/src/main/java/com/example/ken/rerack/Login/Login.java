@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ken.rerack.ApiRequest;
+import com.example.ken.rerack.ApiType;
+import com.example.ken.rerack.AsyncResponse;
 import com.example.ken.rerack.MainActivity;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
@@ -73,24 +75,18 @@ public class Login extends AppCompatActivity {
         getViewIds();
         getLoginStrings();
         if (!username.isEmpty() && !password.isEmpty()){
-           // for (User u : users){
-            //    if(u.login(username,password)){
-                    ApiRequest api = new ApiRequest();
-                    api.username = this.username;
-                    api.password = this.password;
-                    api.login = this;
-                    api.execute();
-
-                 /*   Intent intent = new Intent(this, MainActivity.class);
-                    String textMessage = user.getUsername();
-                    intent.putExtra(EXTRA_MESSAGE,textMessage);
-                    isLoggedIn = true;
-                    saveCredentials();
-                    startActivity(intent);*/
-                  //  break;
-              //  }
-            //}
-        //    isLoggedIn();
+            ApiRequest api =new ApiRequest(ApiType.LOGIN,this.username,this.password,new AsyncResponse() {
+                @Override
+                public void processFinish(Object output) {
+                    if(output != null) {
+                        User user = (User) output;
+                        loginSuccess(user);
+                    }else{
+                        loginFailed();
+                    }
+                }
+            });
+            api.execute();
         }
         else {
             Toast.makeText(Login.this,"Username or password is empty!", Toast.LENGTH_LONG).show();
