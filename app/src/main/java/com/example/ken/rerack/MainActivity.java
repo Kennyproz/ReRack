@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ken.rerack.Login.Login;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        welcome();
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         checkNFCStatus();
@@ -42,5 +47,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void welcome(){{
+        Intent intent = getIntent();
+        String textMessage = intent.getStringExtra(Login.EXTRA_MESSAGE);
+
+        TextView text = (TextView)findViewById(R.id.txtWelcome);
+        text.setText("Welkom: " + textMessage);
+
+
+
+    }
+    }
 
 }
