@@ -1,4 +1,4 @@
-package com.example.ken.rerack;
+package com.example.ken.rerack.Login;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ken.rerack.Login.Login;
+import com.example.ken.rerack.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,13 @@ public class MainActivity extends AppCompatActivity {
         welcome();
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        checkNFCStatus();
+        try{
+            checkNFCStatus();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void checkNFCStatus(){
@@ -39,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void enableNFC(View v){
         Switch s = (Switch)findViewById(R.id.switchNFC);
+        if (nfcAdapter != null & nfcAdapter.isEnabled()){
+
+        }
+
         if (s.isEnabled()){
             startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
         }
@@ -47,16 +58,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void welcome(){{
+    private void welcome(){
         Intent intent = getIntent();
         String textMessage = intent.getStringExtra(Login.EXTRA_MESSAGE);
 
         TextView text = (TextView)findViewById(R.id.txtWelcome);
         text.setText("Welkom: " + textMessage);
-
-
-
-    }
     }
 
 }
