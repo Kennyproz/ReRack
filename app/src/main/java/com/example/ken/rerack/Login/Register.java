@@ -56,7 +56,7 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(Register.this,"Please fill in all fields!",Toast.LENGTH_LONG).show();
             }
             else {
-                User user = new User(username,0);
+                User user = new User(0, username,0);
                 userList.add(user);
             }
         }

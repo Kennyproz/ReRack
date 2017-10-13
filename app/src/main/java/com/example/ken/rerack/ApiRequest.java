@@ -117,9 +117,10 @@ public class ApiRequest extends AsyncTask<String, Void, JSONObject> {
             if ((boolean)result.get("Success") == true) {
                 switch (type) {
                     case LOGIN:
+                        int id = result.getInt("Id");
                         String username = result.getString("Username");
                         int fitcoins = result.getInt("FitCoins");
-                        return new User(username, fitcoins);
+                        return new User(id, username, fitcoins);
                     case REGISTER:
                         return true;
                     case ADDHISTORY:
