@@ -27,8 +27,6 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Intent intent = getIntent();
-        userList = (ArrayList<User>) intent.getSerializableExtra("users");
     }
 
     public void registerUser(View v){
@@ -40,7 +38,6 @@ public class Register extends AppCompatActivity {
             else{
                 addUser();
                 //Intent intent = new Intent(this,Login.class);
-                //intent.putExtra("allUsers", (ArrayList<User>)userList);
                 //startActivity(intent);
                 //Toast.makeText(Register.this,"The user is registered succesfully!",Toast.LENGTH_LONG).show();
                 break;
@@ -56,7 +53,7 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(Register.this,"Please fill in all fields!",Toast.LENGTH_LONG).show();
             }
             else {
-                User user = new User(username,pass);
+                User user = new User(username,pass,0);
                 userList.add(user);
             }
         }

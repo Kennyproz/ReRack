@@ -18,8 +18,9 @@ public class User {
 
     public int getFitCoins() { return fitCoins; }
 
-    public User(String username, String password, int fitCoins) {
 
+
+    public User(String username, String password, int fitCoins) {
         this.username = username;
         this.password = password;
         this.fitCoins = fitCoins;
