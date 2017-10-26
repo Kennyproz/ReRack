@@ -53,7 +53,7 @@ public class Register extends AppCompatActivity {
             }
             else {
                 //TODO
-                //Add user to db
+                //Add user to db.
             }
         }
         else {
