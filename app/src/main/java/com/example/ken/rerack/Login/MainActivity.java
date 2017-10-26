@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,21 +35,16 @@ public class MainActivity extends AppCompatActivity {
     int timesRestacked;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    TextView tagID;
     String[] history;
     ArrayAdapter<String> adapter;
     ListView listView;
-
+    TextView tvTagID, tvWelcomeText, tvRestackedStatus, tvFitCoins;
+    ProgressBar pbProgress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tagID = (TextView) findViewById(R.id.txtTagId);
-        sharedPreferences = getPreferences(MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        this.tagId = sharedPreferences.getString("tagId", "");
-        this.timesRestacked = sharedPreferences.getInt("timesRescacked", 0);
-        welcome();
+        initialize();
 
     /*Begin NFC*/
         try {
@@ -65,7 +61,36 @@ public class MainActivity extends AppCompatActivity {
         }
     /*End NFC*/
     }
+    private void initialize() {
+        //initialize layout items
+        tvWelcomeText = (TextView) findViewById(R.id.txtWelcome);
+        tvRestackedStatus = (TextView) findViewById(R.id.tvRestackStatus);
+        tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
+        pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
+        tvTagID = (TextView) findViewById(R.id.txtTagId);
 
+        //sharedPreferences
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        editor.clear().commit();
+
+        this.tagId = sharedPreferences.getString("tagId", "");
+        this.timesRestacked = sharedPreferences.getInt("timesRestacked", 0);
+
+        //get user
+        Intent intent = getIntent();
+        this.user = (User) intent.getSerializableExtra("user");
+
+        //set value to layout items
+        tvWelcomeText.setText("Welkom: " + user.getUsername());
+        tvRestackedStatus.setText(this.timesRestacked + "/4 Restacked");
+        tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
+        pbProgress.setMax(4);
+        pbProgress.setProgress(this.timesRestacked);
+        tvTagID.setText("Tag ID: "+this.tagId);
+        addHistory();
+    }
     public void onPause() {
         super.onPause();
         nfcAdapter.disableForegroundDispatch(this);
@@ -101,16 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void welcome() {
-        Intent intent = getIntent();
-        this.user = (User) intent.getSerializableExtra("user");
-        TextView text = (TextView) findViewById(R.id.txtWelcome);
-        text.setText("Welkom: " + user.getUsername() + " You have " + user.getFitCoins() + " fitCoins.");
-        addHistory();
-
-
-    }
-
     public void onNewIntent(Intent intent) {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         String _tagId = ByteArrayToHexString(myTag.getId());
@@ -123,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ScanOut();
         }
-        tagID.setText("TagID: " + this.tagId);
+        tvTagID.setText("TagID: " + this.tagId);
     }
 
     private String ByteArrayToHexString(byte[] inarray) {
@@ -150,16 +165,20 @@ public class MainActivity extends AppCompatActivity {
     private void ScanOut() {
         if (isScanned()) {
             this.tagId = "";
-            this.timesRestacked++;
-            editor.putInt("timesRescacked", timesRestacked);
+            editor.putInt("timesRestacked", timesRestacked);
             editor.putString("tagId", "");
             editor.commit();
             if (timesRestacked <= 4) {
+                this.timesRestacked++;
                 user.increaseFitCoins(25);
+                tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
+            tvRestackedStatus.setText(this.timesRestacked + "/4 Restacked");
+            pbProgress.setProgress(this.timesRestacked);
+
         }
     }
 
@@ -174,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addHistory() {
         listView = (ListView) findViewById(R.id.lvHome);
-        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017"};
+        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017"};
         adapter = new ArrayAdapter<>(listView.getContext(), android.R.layout.simple_list_item_1, history);
         listView.setAdapter(adapter);
     }
