@@ -23,34 +23,27 @@ public class MainActivity extends AppCompatActivity {
     PendingIntent pendingIntent;
     IntentFilter[] intentFiltersArray;
     String[][] techListsArray;
+    String tagId;
+    //User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         welcome();
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        try{
-            checkNFCStatus();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        //nfc zooi
-        pendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-
+    /*Begin NFC*/
         try {
-            ndef.addDataType("*/*");    /* Handles all MIME based dispatches.
-                                       You should specify only the ones that you need. */
+            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            checkNFCStatus();
+
+            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            ndef.addDataType("*/*");
+            intentFiltersArray = new IntentFilter[]{ndef,};
+            techListsArray = new String[][]{new String[]{NfcF.class.getName()}};
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
-        catch (IntentFilter.MalformedMimeTypeException e) {
-            throw new RuntimeException("fail", e);
-        }
-        intentFiltersArray = new IntentFilter[] {ndef, };
-        techListsArray = new String[][] { new String[] { NfcF.class.getName() } };
+    /*End NFC*/
     }
     public void onPause() {
         super.onPause();
@@ -59,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
+        try {
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public void checkNFCStatus(){
@@ -75,10 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void enableNFC(View v){
         Switch s = (Switch)findViewById(R.id.switchNFC);
-        if (nfcAdapter != null & nfcAdapter.isEnabled()){
-
-        }
-
+        if (nfcAdapter != null & nfcAdapter.isEnabled()){}
         if (s.isEnabled()){
             startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
         }
@@ -90,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private void welcome(){
         Intent intent = getIntent();
         String textMessage = intent.getStringExtra(Login.EXTRA_MESSAGE);
-
+       // this.user = intent.getSerializableExtra("user");
         TextView text = (TextView)findViewById(R.id.txtWelcome);
         text.setText("Welkom: " + textMessage);
     }
@@ -99,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
     {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         TextView tagID = (TextView) findViewById(R.id.txtTagId);
-        tagID.setText("TagID: " + ByteArrayToHexString(myTag.getId()));
+        this.tagId = ByteArrayToHexString(myTag.getId());
+        tagID.setText("TagID: " + tagId);
     }
     private String ByteArrayToHexString(byte [] inarray)
     {
@@ -116,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
             out += hex[i];
         }
         return out;
+    }
+    private boolean isScanned(){
+        if(tagId != "")return true;
+        return false;
     }
 
 }
