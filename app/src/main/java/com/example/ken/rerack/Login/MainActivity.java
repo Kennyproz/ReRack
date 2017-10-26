@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ken.rerack.Login.Login;
 import com.example.ken.rerack.R;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         TextView tagID = (TextView) findViewById(R.id.txtTagId);
         tagID.setText("TagID: " + ByteArrayToHexString(myTag.getId()));
+        ListView listView = (ListView) findViewById(R.id.lvHome);
+
     }
     private String ByteArrayToHexString(byte [] inarray)
     {
