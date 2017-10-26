@@ -46,12 +46,10 @@ public class MainActivity extends AppCompatActivity {
         tagID = (TextView) findViewById(R.id.txtTagId);
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        this.tagId = sharedPreferences.getString("tagId","");
-        this.timesRestacked = sharedPreferences.getInt("timesRescacked",0);
+        this.tagId = sharedPreferences.getString("tagId", "");
+        this.timesRestacked = sharedPreferences.getInt("timesRescacked", 0);
         welcome();
-        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017"};
-        adapter = new ArrayAdapter<>(listView.getContext(), android.R.layout.simple_list_item_1, history);
-        listView.setAdapter(adapter);
+
     /*Begin NFC*/
         try {
             nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -108,20 +106,21 @@ public class MainActivity extends AppCompatActivity {
         this.user = (User) intent.getSerializableExtra("user");
         TextView text = (TextView) findViewById(R.id.txtWelcome);
         text.setText("Welkom: " + user.getUsername() + " You have " + user.getFitCoins() + " fitCoins.");
-        listView = (ListView) findViewById(R.id.lvHome);
+        addHistory();
+
 
     }
 
     public void onNewIntent(Intent intent) {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         String _tagId = ByteArrayToHexString(myTag.getId());
-        System.out.print("Scanned id: "+_tagId);
-        System.out.print("Old id: "+this.tagId);
+        System.out.print("Scanned id: " + _tagId);
+        System.out.print("Old id: " + this.tagId);
         //New tag
-        if(!Objects.equals(_tagId, this.tagId)){
+        if (!Objects.equals(_tagId, this.tagId)) {
             this.tagId = _tagId;
             ScanIn();
-        }else{
+        } else {
             ScanOut();
         }
         tagID.setText("TagID: " + this.tagId);
@@ -142,32 +141,42 @@ public class MainActivity extends AppCompatActivity {
         return out;
     }
 
-    private void ScanIn(){
+    private void ScanIn() {
         editor.putString("tagId", tagId);
         editor.commit();
-        Toast.makeText(this,"Scanned in",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Scanned in", Toast.LENGTH_LONG).show();
     }
-    private void ScanOut(){
-        if(isScanned()) {
+
+    private void ScanOut() {
+        if (isScanned()) {
             this.tagId = "";
             this.timesRestacked++;
             editor.putInt("timesRescacked", timesRestacked);
             editor.putString("tagId", "");
             editor.commit();
-            if(timesRestacked <= 4){
+            if (timesRestacked <= 4) {
                 user.increaseFitCoins(25);
-                Toast.makeText(this,"Scanned out. You received 25 FitCoins",Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(this,"Scanned out.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
         }
     }
-    private void updateTimesRestacked(){
+
+    private void updateTimesRestacked() {
         //TODO:: update progressbar for TimesRestacked
     }
-    private boolean isScanned(){
-        if(tagId != "")return true;
+
+    private boolean isScanned() {
+        if (tagId != "") return true;
         return false;
+    }
+
+    private void addHistory() {
+        listView = (ListView) findViewById(R.id.lvHome);
+        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017"};
+        adapter = new ArrayAdapter<>(listView.getContext(), android.R.layout.simple_list_item_1, history);
+        listView.setAdapter(adapter);
     }
 
 }
