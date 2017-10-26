@@ -16,6 +16,11 @@ public class User implements Serializable {
     }
 
     public int getFitCoins() { return fitCoins; }
+
+    public void increaseFitCoins(int fitCoins){
+        this.fitCoins += fitCoins;
+    }
+
     public int getId(){ return this.id; }
 
     public User(int id, String username,  int fitCoins) {
