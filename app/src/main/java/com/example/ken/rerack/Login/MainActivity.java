@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +26,20 @@ public class MainActivity extends AppCompatActivity {
     PendingIntent pendingIntent;
     IntentFilter[] intentFiltersArray;
     String[][] techListsArray;
+    ListView listView;
+    String[] history;
+    ArrayAdapter<String> adapter;
     String tagId;
     User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         welcome();
+        history = new String[] {"10 KG - 27-10-2017"," 5 KG - 20-10-2017","10 KG - 20-10-2017" };
+        adapter = new ArrayAdapter<>(listView.getContext(),android.R.layout.simple_list_item_1,history);
+        listView.setAdapter(adapter);
     /*Begin NFC*/
         try {
             nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -87,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         this.user = (User)intent.getSerializableExtra("user");
         TextView text = (TextView)findViewById(R.id.txtWelcome);
         text.setText("Welkom: "+user.getUsername()+" You have "+user.getFitCoins()+" fitCoins.");
+        listView = (ListView) findViewById(R.id.lvHome);
+
     }
 
     public void onNewIntent(Intent intent)
