@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         welcome();
-        history = new String[] {"10 KG - 27-10-2017"," 5 KG - 20-10-2017","10 KG - 20-10-2017" };
-        adapter = new ArrayAdapter<>(listView.getContext(),android.R.layout.simple_list_item_1,history);
+        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017"};
+        adapter = new ArrayAdapter<>(listView.getContext(), android.R.layout.simple_list_item_1, history);
         listView.setAdapter(adapter);
     /*Begin NFC*/
         try {
@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
             ndef.addDataType("*/*");
             intentFiltersArray = new IntentFilter[]{ndef,};
             techListsArray = new String[][]{new String[]{NfcF.class.getName()}};
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     /*End NFC*/
     }
+
     public void onPause() {
         super.onPause();
         nfcAdapter.disableForegroundDispatch(this);
@@ -64,57 +65,54 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         try {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void checkNFCStatus(){
-        if(nfcAdapter != null & nfcAdapter.isEnabled()){
+    public void checkNFCStatus() {
+        if (nfcAdapter != null & nfcAdapter.isEnabled()) {
             System.out.println("NFC works :) ");
-            Toast.makeText(this,"NFC Available",Toast.LENGTH_LONG).show();
-        }
-        else {
+            Toast.makeText(this, "NFC Available", Toast.LENGTH_LONG).show();
+        } else {
             System.out.println("nope");
-            Toast.makeText(this,"NFC not enabled",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "NFC not enabled", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void enableNFC(View v){
-        Switch s = (Switch)findViewById(R.id.switchNFC);
-        if (nfcAdapter != null & nfcAdapter.isEnabled()){}
-        if (s.isEnabled()){
-            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
+    public void enableNFC(View v) {
+        Switch s = (Switch) findViewById(R.id.switchNFC);
+        if (nfcAdapter != null & nfcAdapter.isEnabled()) {
         }
-        else {
+        if (s.isEnabled()) {
+            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
+        } else {
             checkNFCStatus();
         }
     }
 
-    private void welcome(){
+    private void welcome() {
         Intent intent = getIntent();
-        this.user = (User)intent.getSerializableExtra("user");
-        TextView text = (TextView)findViewById(R.id.txtWelcome);
-        text.setText("Welkom: "+user.getUsername()+" You have "+user.getFitCoins()+" fitCoins.");
+        this.user = (User) intent.getSerializableExtra("user");
+        TextView text = (TextView) findViewById(R.id.txtWelcome);
+        text.setText("Welkom: " + user.getUsername() + " You have " + user.getFitCoins() + " fitCoins.");
         listView = (ListView) findViewById(R.id.lvHome);
 
     }
 
-    public void onNewIntent(Intent intent)
-    {
+    public void onNewIntent(Intent intent) {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         TextView tagID = (TextView) findViewById(R.id.txtTagId);
         this.tagId = ByteArrayToHexString(myTag.getId());
         tagID.setText("TagID: " + tagId);
     }
-    private String ByteArrayToHexString(byte [] inarray)
-    {
-        int i, j, in;
-        String [] hex = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
-        String out= "";
 
-        for(j = 0 ; j < inarray.length ; ++j)
-        {
+    private String ByteArrayToHexString(byte[] inarray) {
+        int i, j, in;
+        String[] hex = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
+        String out = "";
+
+        for (j = 0; j < inarray.length; ++j) {
             in = (int) inarray[j] & 0xff;
             i = (in >> 4) & 0x0f;
             out += hex[i];
@@ -123,8 +121,9 @@ public class MainActivity extends AppCompatActivity {
         }
         return out;
     }
-    private boolean isScanned(){
-        if(tagId != "")return true;
+
+    private boolean isScanned() {
+        if (tagId != "") return true;
         return false;
     }
 
