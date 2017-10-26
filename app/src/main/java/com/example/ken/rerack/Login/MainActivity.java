@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         TextView tagID = (TextView) findViewById(R.id.txtTagId);
         tagID.setText("TagID: " + ByteArrayToHexString(myTag.getId()));
-        ListView listView = (ListView) findViewById(R.id.lvHome);
 
     }
     private String ByteArrayToHexString(byte [] inarray)
