@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.ken.rerack.Login.Login;
 import com.example.ken.rerack.R;
+import com.example.ken.rerack.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     IntentFilter[] intentFiltersArray;
     String[][] techListsArray;
     String tagId;
-    //User user;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,10 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void welcome(){
         Intent intent = getIntent();
-        String textMessage = intent.getStringExtra(Login.EXTRA_MESSAGE);
-       // this.user = intent.getSerializableExtra("user");
+        this.user = (User)intent.getSerializableExtra("user");
         TextView text = (TextView)findViewById(R.id.txtWelcome);
-        text.setText("Welkom: " + textMessage);
+        text.setText("Welkom: "+user.getUsername()+" You have "+user.getFitCoins()+" fitCoins.");
     }
 
     public void onNewIntent(Intent intent)

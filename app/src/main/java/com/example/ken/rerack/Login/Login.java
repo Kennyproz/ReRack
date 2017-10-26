@@ -85,8 +85,8 @@ public class Login extends AppCompatActivity {
     public void loginSuccess(User user) {
         Intent intent = new Intent(this, MainActivity.class);
         String textMessage = user.getUsername();
-        intent.putExtra(EXTRA_MESSAGE, textMessage);
         isLoggedIn = true;
+        intent.putExtra("user",user);
         saveCredentials();
         System.out.println("Logged in");
         startActivity(intent);

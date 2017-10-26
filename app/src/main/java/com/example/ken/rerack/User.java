@@ -1,10 +1,12 @@
 package com.example.ken.rerack;
 
+import java.io.Serializable;
+
 /**
  * Created by Ken on 12-10-2017.
  */
 
-public class User {
+public class User implements Serializable {
     private int id;
     private String username;
     private int fitCoins;
