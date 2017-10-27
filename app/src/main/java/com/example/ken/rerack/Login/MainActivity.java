@@ -1,6 +1,7 @@
 package com.example.ken.rerack.Login;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -15,6 +16,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ken.rerack.Hardware;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
 import java.util.ArrayList;
@@ -40,13 +43,14 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     TextView tvtxtName, tvRestackedStatus, tvFitCoins;
     ProgressBar pbProgress;
+    Hardware hardware;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
-
+        hardware = new Hardware(this);
     /*Begin NFC*/
         try {
             nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -161,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("tagId", tagId);
         editor.commit();
         changeImage();
+        hardware.vibrate(3);
         Toast.makeText(this, "Scanned in", Toast.LENGTH_LONG).show();
     }
 
@@ -174,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
+                hardware.vibrate(6);
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
 
             } else {
