@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onPause() {
         super.onPause();
+        if(nfcAdapter != null)
         nfcAdapter.disableForegroundDispatch(this);
     }
 
