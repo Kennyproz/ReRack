@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initialize();
 
+        editor.clear().commit();
     /*Begin NFC*/
         try {
             nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -72,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        editor.clear().commit();
 
         this.tagId = sharedPreferences.getString("tagId", "");
         this.timesRestacked = sharedPreferences.getInt("timesRestacked", 0);
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putInt("timesRestacked", timesRestacked);
             editor.putString("tagId", "");
             editor.commit();
-            if (timesRestacked <= 4) {
+            if (timesRestacked < 4) {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
