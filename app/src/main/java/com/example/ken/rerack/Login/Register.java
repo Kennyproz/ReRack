@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ken.rerack.ApiRequest;
+import com.example.ken.rerack.ApiType;
+import com.example.ken.rerack.AsyncResponse;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
 
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Register extends AppCompatActivity {
-    List<User> userList;
     EditText edUsername, edPass1, edPass2;
     String username, pass, pass1;
 
@@ -29,20 +31,9 @@ public class Register extends AppCompatActivity {
     }
 
     public void registerUser(View v){
-        EditText username = (EditText)findViewById(R.id.editTextUsername);
-        for (User u : userList){
-            if (u.getUsername().toString().equals(username.getText().toString())){
-                Toast.makeText(Register.this,"Username already in Use!!",Toast.LENGTH_LONG).show();
-            }
-            else{
-                addUser();
-                //Intent intent = new Intent(this,Login.class);
-                //startActivity(intent);
-                //Toast.makeText(Register.this,"The user is registered succesfully!",Toast.LENGTH_LONG).show();
-                break;
-            }
-        }
+         addUser();
     }
+
     private void addUser(){
         getViewIds();
         getFilledInText();
@@ -52,19 +43,33 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(Register.this,"Please fill in all fields!",Toast.LENGTH_LONG).show();
             }
             else {
-                //TODO
                 //Add user to db.
+                ApiRequest api = new ApiRequest(ApiType.REGISTER, this.username, this.pass, new AsyncResponse() {
+                    @Override
+                    public void processFinish(Object output) {
+                        if (output != null) {
+                            registerSuccess();
+                        } else {
+                            Toast.makeText(Register.this,"Registration failed. Username already in use.",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                api.execute();
             }
         }
         else {
             Toast.makeText(Register.this,"Password do not match!!",Toast.LENGTH_LONG).show();
         }
     }
-
+    private void registerSuccess(){
+        Toast.makeText(Register.this,"The user is registered succesfully!",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,Login.class);
+        startActivity(intent);
+    }
     private void getViewIds(){
         edUsername = (EditText)findViewById(R.id.editTextUsername);
-        edPass1 = (EditText)findViewById(R.id.editTextPass);
-        edPass2 = (EditText)findViewById(R.id.editTextpass);
+        edPass1 = (EditText)findViewById(R.id.editTextPass1);
+        edPass2 = (EditText)findViewById(R.id.editTextPass2);
     }
 
     private void getFilledInText(){
