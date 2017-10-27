@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ken.smartmobileapplication.Login.Register"
+    tools:context="com.example.ken.rerack.Login.Register"
     >
 
     android:layout_width="match_parent"
@@ -19,7 +19,8 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        tools:layout_editor_absoluteY="8dp"
+        tools:ignore="MissingConstraints">
 
         <EditText
             android:id="@+id/editTextUsername"
