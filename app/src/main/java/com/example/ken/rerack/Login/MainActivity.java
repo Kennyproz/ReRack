@@ -120,17 +120,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
- /*   public void enableNFC(View v) {
-        Switch s = (Switch) findViewById(R.id.switchNFC);
-        if (nfcAdapter != null & nfcAdapter.isEnabled()) {
-        }
-        if (s.isEnabled()) {
-            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
-        } else {
-            checkNFCStatus();
-        }
-    }*/
-
     public void onNewIntent(Intent intent) {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         String _tagId = ByteArrayToHexString(myTag.getId());
@@ -165,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("tagId", tagId);
         editor.commit();
         changeImage();
-        hardware.vibrate(3);
+        hardware.vibrate(300);
         Toast.makeText(this, "Scanned in", Toast.LENGTH_LONG).show();
     }
 
@@ -179,12 +168,12 @@ public class MainActivity extends AppCompatActivity {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
-                hardware.vibrate(6);
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
 
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
+            hardware.vibrate(600);
             updateHistory();
             tvRestackedStatus.setText(this.timesRestacked + "/4 Restacked");
             pbProgress.setProgress(this.timesRestacked);
