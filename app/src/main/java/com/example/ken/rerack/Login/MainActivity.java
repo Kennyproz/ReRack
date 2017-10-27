@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
         tvTagID = (TextView) findViewById(R.id.txtTagId);
-        img.setImageResource(R.drawable.scan);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
