@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -22,31 +23,40 @@ import com.example.ken.rerack.Login.Login;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
 
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter[] intentFiltersArray;
+    ImageView img;
     String[][] techListsArray;
     User user;
     String tagId;
-    int timesRestacked;
+    int timesRestacked, currentWeight;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String[] history;
+    List history;
     ArrayAdapter<String> adapter;
     ListView listView;
     TextView tvTagID, tvWelcomeText, tvRestackedStatus, tvFitCoins;
     ProgressBar pbProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
 
-        editor.clear().commit();
+
     /*Begin NFC*/
         try {
             nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -64,15 +74,19 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initialize() {
         //initialize layout items
+        img = (ImageView)findViewById(R.id.imageView);
         tvWelcomeText = (TextView) findViewById(R.id.txtWelcome);
         tvRestackedStatus = (TextView) findViewById(R.id.tvRestackStatus);
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
         tvTagID = (TextView) findViewById(R.id.txtTagId);
+        img.setImageResource(R.drawable.scan);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        editor.clear().commit();
 
         this.tagId = sharedPreferences.getString("tagId", "");
         this.timesRestacked = sharedPreferences.getInt("timesRestacked", 0);
@@ -158,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
     private void ScanIn() {
         editor.putString("tagId", tagId);
         editor.commit();
+        changeImage();
         Toast.makeText(this, "Scanned in", Toast.LENGTH_LONG).show();
     }
 
@@ -167,11 +182,13 @@ public class MainActivity extends AppCompatActivity {
             editor.putInt("timesRestacked", timesRestacked);
             editor.putString("tagId", "");
             editor.commit();
-            if (timesRestacked < 4) {
+            if (timesRestacked <= 4) {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
+
+                updateHistory();
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
@@ -192,9 +209,50 @@ public class MainActivity extends AppCompatActivity {
 
     private void addHistory() {
         listView = (ListView) findViewById(R.id.lvHome);
-        history = new String[]{"10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017"};
+        history = new ArrayList<String>(Arrays.asList("10 KG - 27-10-2017", " 5 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017", "10 KG - 20-10-2017"));
         adapter = new ArrayAdapter<>(listView.getContext(), android.R.layout.simple_list_item_1, history);
         listView.setAdapter(adapter);
+    }
+
+    private void changeImage(){
+        Random rand = new Random();
+        int randInt = rand.nextInt(4)+1;
+        String image = "img" +randInt;
+        int id = getResources().getIdentifier(image,"drawable",getPackageName());
+        try{
+            img.setImageResource(id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void updateHistory(){
+        switch (currentWeight){
+            case 1:
+                history.add(0,"2,5 KG - Vandaag");
+
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 2:
+                history.add(0,"5KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 3:
+                history.add(0,"10KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 4:
+                history.add(0,"20KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            default:
+                break;
+        }
+        img.setImageResource(R.drawable.scan);
     }
 
 }
