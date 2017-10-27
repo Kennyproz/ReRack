@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         tvRestackedStatus = (TextView) findViewById(R.id.tvRestackStatus);
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
-        tvTagID = (TextView) findViewById(R.id.txtTagId);
+       // tvTagID = (TextView) findViewById(R.id.txtTagId);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
         pbProgress.setMax(4);
         pbProgress.setProgress(this.timesRestacked);
-        tvTagID.setText("Tag ID: "+this.tagId);
+       // tvTagID.setText("Tag ID: "+this.tagId);
         addHistory();
     }
     public void onPause() {
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void enableNFC(View v) {
+ /*   public void enableNFC(View v) {
         Switch s = (Switch) findViewById(R.id.switchNFC);
         if (nfcAdapter != null & nfcAdapter.isEnabled()) {
         }
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkNFCStatus();
         }
-    }
+    }*/
 
     public void onNewIntent(Intent intent) {
         Tag myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -149,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ScanOut();
         }
-        tvTagID.setText("TagID: " + this.tagId);
+       // tvTagID.setText("TagID: " + this.tagId);
     }
 
-    private String ByteArrayToHexString(byte[] inarray) {
+   private String ByteArrayToHexString(byte[] inarray) {
         int i, j, in;
         String[] hex = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
         String out = "";
@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         img.setImageResource(R.drawable.scan);
     }
+
 
 
 }
