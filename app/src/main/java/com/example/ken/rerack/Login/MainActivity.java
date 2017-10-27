@@ -225,29 +225,23 @@ public class MainActivity extends AppCompatActivity {
         switch (currentWeight){
             case 1:
                 history.add(0,"2,5 KG - Vandaag");
-
-                listView.setAdapter(null);
-                listView.setAdapter(adapter);
                 break;
             case 2:
                 history.add(0,"5KG - Vandaag");
-                listView.setAdapter(null);
-                listView.setAdapter(adapter);
                 break;
             case 3:
                 history.add(0,"10KG - Vandaag");
-                listView.setAdapter(null);
-                listView.setAdapter(adapter);
                 break;
             case 4:
                 history.add(0,"20KG - Vandaag");
-                listView.setAdapter(null);
-                listView.setAdapter(adapter);
                 break;
             default:
                 break;
         }
+        listView.setAdapter(null);
+        listView.setAdapter(adapter);
         img.setImageResource(R.drawable.scan);
     }
+
 
 }
