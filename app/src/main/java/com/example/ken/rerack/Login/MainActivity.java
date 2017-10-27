@@ -9,23 +9,14 @@ import android.nfc.Tag;
 import android.nfc.tech.NfcF;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.ken.rerack.Login.Login;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     List history;
     ArrayAdapter<String> adapter;
     ListView listView;
-    TextView tvTagID, tvWelcomeText, tvRestackedStatus, tvFitCoins;
+    TextView tvtxtName, tvRestackedStatus, tvFitCoins;
     ProgressBar pbProgress;
 
     @Override
@@ -74,11 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private void initialize() {
         //initialize layout items
         img = (ImageView)findViewById(R.id.imageView);
-        tvWelcomeText = (TextView) findViewById(R.id.txtWelcome);
+        tvtxtName = (TextView) findViewById(R.id.txtName);
         tvRestackedStatus = (TextView) findViewById(R.id.tvRestackStatus);
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
-       // tvTagID = (TextView) findViewById(R.id.txtTagId);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -94,12 +84,11 @@ public class MainActivity extends AppCompatActivity {
         this.user = (User) intent.getSerializableExtra("user");
 
         //set value to layout items
-        tvWelcomeText.setText("Welkom: " + user.getUsername());
+        tvtxtName.setText(user.getUsername());
         tvRestackedStatus.setText(this.timesRestacked + "/4 Restacked");
         tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
         pbProgress.setMax(4);
         pbProgress.setProgress(this.timesRestacked);
-       // tvTagID.setText("Tag ID: "+this.tagId);
         addHistory();
     }
     public void onPause() {
