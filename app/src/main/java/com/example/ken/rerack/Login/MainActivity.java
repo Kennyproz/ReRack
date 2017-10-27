@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     String[][] techListsArray;
     User user;
     String tagId;
-    int timesRestacked;
+    int timesRestacked, currentWeight;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     List history;
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
     private void ScanIn() {
         editor.putString("tagId", tagId);
         editor.commit();
+        changeImage();
         Toast.makeText(this, "Scanned in", Toast.LENGTH_LONG).show();
     }
 
@@ -185,7 +186,8 @@ public class MainActivity extends AppCompatActivity {
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
-                changeImage();
+
+                updateHistory();
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
@@ -218,37 +220,39 @@ public class MainActivity extends AppCompatActivity {
         int id = getResources().getIdentifier(image,"drawable",getPackageName());
         try{
             img.setImageResource(id);
-            switch (randInt){
-                case 1:
-                    history.add(0,"2,5 KG - Vandaag");
-
-                    listView.setAdapter(null);
-                    listView.setAdapter(adapter);
-                    break;
-                case 2:
-                    history.add(0,"5KG - Vandaag");
-                    listView.setAdapter(null);
-                    listView.setAdapter(adapter);
-                    break;
-                case 3:
-                    history.add(0,"10KG - Vandaag");
-                    listView.setAdapter(null);
-                    listView.setAdapter(adapter);
-                    break;
-                case 4:
-                    history.add(0,"20KG - Vandaag");
-                    listView.setAdapter(null);
-                    listView.setAdapter(adapter);
-
-                    break;
-                default:
-                    break;
-            }
-
         }
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+    private void updateHistory(){
+        switch (currentWeight){
+            case 1:
+                history.add(0,"2,5 KG - Vandaag");
+
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 2:
+                history.add(0,"5KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 3:
+                history.add(0,"10KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+                break;
+            case 4:
+                history.add(0,"20KG - Vandaag");
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
+
+                break;
+            default:
+                break;
+        }
+
     }
 
 }
