@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
+        editor.clear().commit();
 
 
     /*Begin NFC*/
@@ -85,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        editor.clear().commit();
 
         this.tagId = sharedPreferences.getString("tagId", "");
         this.timesRestacked = sharedPreferences.getInt("timesRestacked", 0);
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putInt("timesRestacked", timesRestacked);
             editor.putString("tagId", "");
             editor.commit();
-            if (timesRestacked <= 4) {
+            if (timesRestacked < 4) {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
@@ -196,10 +195,6 @@ public class MainActivity extends AppCompatActivity {
             pbProgress.setProgress(this.timesRestacked);
 
         }
-    }
-
-    private void updateTimesRestacked() {
-        //TODO:: update progressbar for TimesRestacked
     }
 
     private boolean isScanned() {
