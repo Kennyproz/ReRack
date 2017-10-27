@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
-        editor.clear().commit();
-
 
     /*Begin NFC*/
         try {
@@ -86,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        editor.clear().commit();
 
         this.tagId = sharedPreferences.getString("tagId", "");
         this.timesRestacked = sharedPreferences.getInt("timesRestacked", 0);
@@ -187,13 +187,12 @@ public class MainActivity extends AppCompatActivity {
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
                 Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
 
-                updateHistory();
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
             }
+            updateHistory();
             tvRestackedStatus.setText(this.timesRestacked + "/4 Restacked");
             pbProgress.setProgress(this.timesRestacked);
-
         }
     }
 
@@ -216,28 +215,31 @@ public class MainActivity extends AppCompatActivity {
         int id = getResources().getIdentifier(image,"drawable",getPackageName());
         try{
             img.setImageResource(id);
+            currentWeight = randInt;
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
     private void updateHistory(){
+        String kg = "";
         switch (currentWeight){
             case 1:
-                history.add(0,"2,5 KG - Vandaag");
+                kg = "2,5 KG - Vandaag";
                 break;
             case 2:
-                history.add(0,"5KG - Vandaag");
+                kg = "5 KG - Vandaag";
                 break;
             case 3:
-                history.add(0,"10KG - Vandaag");
+                kg = "10 KG - Vandaag";
                 break;
             case 4:
-                history.add(0,"20KG - Vandaag");
+                kg = "20 KG - Vandaag";
                 break;
             default:
                 break;
         }
+        history.add(0,kg);
         listView.setAdapter(null);
         listView.setAdapter(adapter);
         img.setImageResource(R.drawable.scan);
