@@ -99,18 +99,15 @@ public class ItemMover {
 
     private void changePos(){
         Y -= 10;
-        if (item.getY() + item.getHeight() < 0 ){
+       if (item.getY() + item.getHeight() < 0 ){
             X = (float)Math.floor(Math.random() * (screenWidth - item.getWidth()));
             Y = screenHeight + 100.0f;
         }
         item.setX(X);
         item.setY(Y);
-        if (item.getHeight() < -50){
-            timer.cancel();
-        }
     }
 
-    public void moveItem(){
+    public void moveItem() {
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -118,13 +115,24 @@ public class ItemMover {
                     @Override
                     public void run() {
                         changePos();
-                        System.out.println(item.getY());
+                        stopItem();
                     }
                 });
             }
         };
-        timer.schedule(timerTask,0,25);
+        timer.schedule(timerTask, 0, 35);
+    }
 
+    private void stopItem(){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Y);
+                if (Y < -40){
+                    timerTask.cancel();
+                }
+            }
+        },100);
     }
 
 
