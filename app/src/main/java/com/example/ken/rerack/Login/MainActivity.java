@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcF;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Menu;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,8 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ken.rerack.Hardware;
+import com.example.ken.rerack.ItemMover;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
     List history;
     ArrayAdapter<String> adapter;
     ListView listView;
-    TextView tvtxtName, tvRestackedStatus, tvFitCoins;
+    TextView tvtxtName, tvRestackedStatus, tvFitCoins, tvPoints;
     ProgressBar pbProgress;
     Hardware hardware;
+    ItemMover itemMover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     /*End NFC*/
+    specialEffect();
     }
     private void initialize() {
         //initialize layout items
@@ -73,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         tvRestackedStatus = (TextView) findViewById(R.id.tvRestackStatus);
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
+        tvPoints = (TextView) findViewById(R.id.tvPoints);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -99,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if(nfcAdapter != null)
         nfcAdapter.disableForegroundDispatch(this);
+        itemMover.getTimerTask().cancel();
+
     }
 
     public void onResume() {
@@ -229,6 +242,21 @@ public class MainActivity extends AppCompatActivity {
         img.setImageResource(R.drawable.scan);
     }
 
+    private void specialEffect(){
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        itemMover = new ItemMover(size.x,size.y,tvPoints);
+        itemMover.moveItem();
+        if (itemMover.getItem().getY() < -30){
+            itemMover.getTimerTask().cancel();
+        }
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        itemMover.getTimerTask().cancel();
+    }
 }
