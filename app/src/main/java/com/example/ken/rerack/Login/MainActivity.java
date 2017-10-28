@@ -12,7 +12,6 @@ import android.nfc.tech.NfcF;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -26,8 +25,6 @@ import com.example.ken.rerack.Hardware;
 import com.example.ken.rerack.ItemMover;
 import com.example.ken.rerack.R;
 import com.example.ken.rerack.User;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     List history;
     ArrayAdapter<String> adapter;
     ListView listView;
-    TextView tvtxtName, tvRestackedStatus, tvFitCoins, tvPoints;
+    TextView tvtxtName, tvRestackedStatus, tvFitCoins, tvPoints, tvWelcome, tvListviewHeader,tvDescript;
     ProgressBar pbProgress;
     Hardware hardware;
     ItemMover itemMover;
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     /*End NFC*/
-    specialEffect();
     }
     private void initialize() {
         //initialize layout items
@@ -85,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         tvFitCoins = (TextView) findViewById(R.id.tvFitcoins);
         pbProgress = (ProgressBar) findViewById(R.id.pbProgress);
         tvPoints = (TextView) findViewById(R.id.tvPoints);
+        tvListviewHeader = (TextView)findViewById(R.id.textView);
+        tvWelcome = (TextView)findViewById(R.id.txtWelcome);
+        tvDescript = (TextView)findViewById(R.id.tvDescriptionGame);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         if(nfcAdapter != null)
         nfcAdapter.disableForegroundDispatch(this);
         itemMover.getTimerTask().cancel();
-
     }
 
     public void onResume() {
@@ -250,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         itemMover = new ItemMover(size.x,size.y,tvPoints);
+        itemMover.setAllItems(listView,img,tvRestackedStatus,tvtxtName,tvWelcome,tvListviewHeader,tvWelcome,pbProgress,tvDescript);
         itemMover.moveItem();
     }
 
@@ -261,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void specialEffectTap(View v){
         user.increaseFitCoins(1);
-        Toast.makeText(this, "+1 Fitcoins", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "+1 Fitcoins", Toast.LENGTH_SHORT).show();
         tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
     }
 }

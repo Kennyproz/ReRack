@@ -1,7 +1,10 @@
 package com.example.ken.rerack;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -15,14 +18,15 @@ import static java.lang.Thread.sleep;
  */
 
 public class ItemMover {
-    private TextView item;
-    private int screenWidth;
-    private int screenHeight;
+    private TextView item, tv1, tv2,tv3,tv4,tv5, tvDescript;
+    private ProgressBar progressBar;
+    private int screenWidth, screenHeight;
     private Handler handler;
     private Timer timer;
     private TimerTask timerTask;
-    private float X;
-    private float Y;
+    private float X,Y;
+    private ImageView image;
+    private ListView listView;
 
     public TextView getItem() {
         return item;
@@ -32,70 +36,31 @@ public class ItemMover {
         this.item = item;
     }
 
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
-    public void setScreenHeight(int screenHeight) {
-        this.screenHeight = screenHeight;
-    }
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
-
-    public Timer getTimer() {
-        return timer;
-    }
-
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
-
     public TimerTask getTimerTask() {
         return timerTask;
-    }
-
-    public void setTimerTask(TimerTask timerTask) {
-        this.timerTask = timerTask;
-    }
-
-    public float getX() {
-        return X;
-    }
-
-    public void setX(float x) {
-        X = x;
-    }
-
-    public float getY() {
-        return Y;
-    }
-
-    public void setY(float y) {
-        Y = y;
     }
 
     public ItemMover(int screenwidth, int screenheight, TextView item){
         this.screenHeight = screenheight;
         this.screenWidth = screenwidth;
+        this.listView = listView;
         this.item = item;
         timer = new Timer();
         handler = new Handler();
     }
 
+    public void setAllItems(ListView listView, ImageView img, TextView tv1, TextView tv2, TextView tv3,TextView tv4, TextView tv5,ProgressBar pb,TextView tvDescript){
+        this.listView = listView;
+        this.image = img;
+        this.tv1 = tv1;
+        this.tv2 = tv2;
+        this.tv3 = tv3;
+        this.tv4 = tv4;
+        this.tv5 = tv5;
+        this.progressBar = pb;
+        this.tvDescript = tvDescript;
+
+    }
 
     private void changePos(){
         Y -= 10;
@@ -115,6 +80,7 @@ public class ItemMover {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        hideItems(true);
                         changePos();
                         stopItem();
                     }
@@ -128,18 +94,37 @@ public class ItemMover {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (Y < -70){
+                if (Y < screenHeight - screenHeight - item.getHeight()){
                     timerTask.cancel();
+                    hideItems(false);
                 }
             }
         },300);
     }
 
-
-
-
-
-
-
+    private void hideItems(Boolean bool){
+        if (bool){
+            image.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            tv1.setVisibility(View.INVISIBLE);
+            tv2.setVisibility(View.INVISIBLE);
+            tv3.setVisibility(View.INVISIBLE);
+            tv4.setVisibility(View.INVISIBLE);
+            tv5.setVisibility(View.INVISIBLE);
+            tvDescript.setVisibility(View.VISIBLE);
+        }
+        else {
+            image.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            tv1.setVisibility(View.VISIBLE);
+            tv2.setVisibility(View.VISIBLE);
+            tv3.setVisibility(View.VISIBLE);
+            tv4.setVisibility(View.VISIBLE);
+            tv5.setVisibility(View.VISIBLE);
+            tvDescript.setVisibility(View.INVISIBLE);
+        }
+    }
 
 }
