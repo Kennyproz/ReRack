@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -181,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
-                Toast.makeText(this, "Scanned out. You received 25 FitCoins", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanned out. You received 25 FitCoins, Tap for more!", Toast.LENGTH_LONG).show();
+                specialEffect();
 
             } else {
                 Toast.makeText(this, "Scanned out.", Toast.LENGTH_LONG).show();
@@ -249,14 +251,17 @@ public class MainActivity extends AppCompatActivity {
         display.getSize(size);
         itemMover = new ItemMover(size.x,size.y,tvPoints);
         itemMover.moveItem();
-        if (itemMover.getItem().getY() < -30){
-            itemMover.getTimerTask().cancel();
-        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         itemMover.getTimerTask().cancel();
+    }
+
+    public void specialEffectTap(View v){
+        user.increaseFitCoins(1);
+        Toast.makeText(this, "+1 Fitcoins", Toast.LENGTH_LONG).show();
+        tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
     }
 }

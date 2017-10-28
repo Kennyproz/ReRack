@@ -99,6 +99,7 @@ public class ItemMover {
 
     private void changePos(){
         Y -= 10;
+
        if (item.getY() + item.getHeight() < 0 ){
             X = (float)Math.floor(Math.random() * (screenWidth - item.getWidth()));
             Y = screenHeight + 100.0f;
@@ -127,12 +128,11 @@ public class ItemMover {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                System.out.println(Y);
-                if (Y < -40){
+                if (Y < -70){
                     timerTask.cancel();
                 }
             }
-        },100);
+        },300);
     }
 
 
