@@ -99,7 +99,7 @@ public class ItemMover {
                     hideItems(false);
                 }
             }
-        },300);
+        },500);
     }
 
     private void hideItems(Boolean bool){

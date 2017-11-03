@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if(nfcAdapter != null)
         nfcAdapter.disableForegroundDispatch(this);
-        itemMover.getTimerTask().cancel();
+    //    itemMover.getTimerTask().cancel();
     }
 
     public void onResume() {
