@@ -51,7 +51,7 @@ public class Register extends AppCompatActivity {
                             registerSuccess();
                         } else {
                             Toast.makeText(Register.this,"Registration failed. Username already in use.",Toast.LENGTH_LONG).show();
-                        }
+                         }
                     }
                 });
                 api.execute();

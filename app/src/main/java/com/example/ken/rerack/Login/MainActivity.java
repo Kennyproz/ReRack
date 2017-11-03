@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         tvListviewHeader = (TextView)findViewById(R.id.textView);
         tvWelcome = (TextView)findViewById(R.id.txtWelcome);
         tvDescript = (TextView)findViewById(R.id.tvDescriptionGame);
+        tvPoints.setVisibility(View.INVISIBLE);
 
         //sharedPreferences
         sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 this.timesRestacked++;
                 user.increaseFitCoins(25);
                 tvFitCoins.setText(user.getFitCoins() + " Fitcoins");
-                Toast.makeText(this, "Scanned out. You received 25 FitCoins, Tap for more!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanned out. You received 25 FitCoins, Tap for more!", Toast.LENGTH_SHORT).show();
                 specialEffect();
 
             } else {
@@ -243,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void specialEffect(){
+        tvPoints.setVisibility(View.VISIBLE);
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();

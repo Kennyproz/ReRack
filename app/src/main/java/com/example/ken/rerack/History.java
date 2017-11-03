@@ -5,4 +5,5 @@ package com.example.ken.rerack;
  */
 
 public class History {
+
 }
